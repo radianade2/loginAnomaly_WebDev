@@ -1,0 +1,40 @@
+<div class="login-container">
+  <h2>Login</h2>
+
+  <!-- Form login utama (sembunyikan saat mode OTP) -->
+  <form (ngSubmit)="onSubmit()" *ngIf="!challengeMode">
+    <div class="field">
+      <label>Username</label>
+      <input [(ngModel)]="username" name="username" required />
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input [(ngModel)]="password" name="password" type="password" required />
+    </div>
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Memproses...' : 'Login' }}
+    </button>
+  </form>
+
+  <!-- Mode OTP saat challenge -->
+  <div class="otp-box" *ngIf="challengeMode">
+    <p><strong>Verifikasi diperlukan.</strong> Masukkan kode OTP.</p>
+    <p class="otp-hint" *ngIf="otpHint">(Demo) Kode OTP kamu: <strong>{{ otpHint }}</strong></p>
+    <input [(ngModel)]="otpInput" name="otp" placeholder="6 digit OTP" />
+    <button (click)="onVerifyOtp()" [disabled]="loading">
+      {{ loading ? 'Memverifikasi...' : 'Verifikasi' }}
+    </button>
+    <p class="err" *ngIf="otpError">{{ otpError }}</p>
+  </div>
+
+  <!-- Pesan block -->
+  <div class="blocked" *ngIf="blockedMinutes !== null">
+    <p>🔒 Akun terkunci. Coba lagi dalam <strong>{{ blockedMinutes }}</strong> menit.</p>
+  </div>
+
+  <!-- Pesan error umum / gagal -->
+  <div class="result" *ngIf="error && !challengeMode && blockedMinutes === null">
+    <p class="err">✗ {{ error }}</p>
+    <p *ngIf="result && result.score > 0">Risk Score: {{ result.score }}</p>
+  </div>
+</div>

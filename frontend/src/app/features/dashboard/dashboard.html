@@ -1,0 +1,60 @@
+<div class="dashboard">
+  <h2>SOC Dashboard</h2>
+
+  <!-- Kartu statistik -->
+  <div class="cards">
+    <div class="card">
+      <div class="num">{{ summary.total }}</div>
+      <div class="label">Total Logins</div>
+    </div>
+    <div class="card">
+      <div class="num">{{ summary.suspicious }}</div>
+      <div class="label">Suspicious</div>
+    </div>
+    <div class="card">
+      <div class="num">{{ summary.activeAlerts }}</div>
+      <div class="label">Active Alerts</div>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <h3>Alerts</h3>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>User</th><th>Severity</th><th>Summary</th><th>Score</th><th>Status</th><th></th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of alerts">
+        <td>{{ a.id }}</td>
+        <td>{{ a.username }}</td>
+        <td>{{ a.severity }}</td>
+        <td>{{ a.summary }}</td>
+        <td>{{ a.riskScore }}</td>
+        <td>{{ a.isAcknowledged ? 'Handled' : 'Open' }}</td>
+        <td>
+          <button *ngIf="!a.isAcknowledged" (click)="acknowledge(a.id)">Ack</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Live stream events -->
+  <h3>Login Events</h3>
+  <table>
+    <thead>
+      <tr><th>ID</th><th>User</th><th>IP</th><th>Success</th><th>Score</th><th>Decision</th><th>Sim?</th><th>Time</th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let e of events">
+        <td>{{ e.id }}</td>
+        <td>{{ e.username }}</td>
+        <td>{{ e.ipAddress }}</td>
+        <td>{{ e.loginSucceeded ? '✓' : '✗' }}</td>
+        <td>{{ e.riskScore }}</td>
+        <td>{{ e.decision }}</td>
+        <td>{{ e.isSimulated ? 'Yes' : '' }}</td>
+        <td>{{ e.timestampUtc | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
